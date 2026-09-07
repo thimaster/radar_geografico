@@ -21,7 +21,7 @@ const TTL_MS = Number.isFinite(configuredTtlMs) && configuredTtlMs > 0
   : 2 * 60 * 1000;
 const DEFAULT_RADIUS_METERS = 500;
 const DEFAULT_TOLERANCE_DEGREES = 90;
-const LOCATION_MAX_AGE_MS = 15 * 1000;
+const LOCATION_MAX_AGE_MS = TTL_MS;
 const CLEANUP_INTERVAL_MS = 1000;
 
 // Para múltiplas instâncias/replicas, substituir estes Maps por Redis ou banco.
@@ -108,7 +108,7 @@ function findBestCandidate(message, now = Date.now()) {
       client.location.latitude,
       client.location.longitude,
     );
-    if (distance > message.raioMetros) continue;
+    //if (distance > message.raioMetros) continue;
 
     const bearing = bearingDegrees(
       message.lat,
@@ -116,7 +116,7 @@ function findBestCandidate(message, now = Date.now()) {
       client.location.latitude,
       client.location.longitude,
     );
-    if (angleDifference(message.anguloDirecao, bearing) > message.toleranciaGraus) continue;
+    //if (angleDifference(message.anguloDirecao, bearing) > message.toleranciaGraus) continue;
 
     if (!bestCandidate || distance < bestCandidate.distance) {
       bestCandidate = { client, distance, bearing };
