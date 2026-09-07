@@ -142,7 +142,7 @@ function tryDeliverMessage(message, now = Date.now()) {
   };
 
   candidate.client.socket.emit('mensagem_entregue', deliveredMessage);
-  io.to(message.remetenteSocketId).emit('notificacao_recebida_remetente', {
+  io.to(message.remetenteSocketId).emit('entrega_confirmada', {
     idDisparo: message.idDisparo,
     remetenteId: message.remetenteId,
     receptorId: candidate.client.clientId,
