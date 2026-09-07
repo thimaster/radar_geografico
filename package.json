@@ -1,0 +1,16 @@
+{
+  "name": "backend-radar-geografico",
+  "version": "1.0.0",
+  "description": "Servidor em tempo real para dinamica do teste de geolocalizacao",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
