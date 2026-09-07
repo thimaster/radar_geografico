@@ -4,11 +4,13 @@
   "description": "Servidor em tempo real para dinamica do teste de geolocalizacao",
   "main": "server.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.8.3"
   },
   "engines": {
     "node": ">=18.0.0"
