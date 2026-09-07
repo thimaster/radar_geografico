@@ -211,11 +211,17 @@ io.on('connection', (socket) => {
 
   socket.on('atualizar_localizacao', (data = {}) => {
     const client = clientsBySocketId.get(socket.id);
-    if (!client || !client.clientId) return;
+    if (!client || !client.clientId) {
+      console.warn(`⚠️ [LOCALIZAÇÃO IGNORADA] Socket não registrado: ${socket.id}`);
+      return;
+    }
 
     const latitude = asFiniteNumber(data.latitude ?? data.lat);
     const longitude = asFiniteNumber(data.longitude ?? data.lon);
-    if (!validCoordinates(latitude, longitude)) return;
+    if (!validCoordinates(latitude, longitude)) {
+      console.warn(`⚠️ [LOCALIZAÇÃO INVÁLIDA] Cliente ${client.clientId}:`, data);
+      return;
+    }
 
     client.location = {
       latitude,
@@ -233,6 +239,7 @@ io.on('connection', (socket) => {
     const client = clientsBySocketId.get(socket.id);
     const validated = validateDispatch(data);
     if (!client || !client.clientId || !validated) {
+      console.warn(`⚠️ [DISPARO REJEITADO] Socket ${socket.id}; registrado=${Boolean(client?.clientId)}`);
       if (typeof ack === 'function') ack({ ok: false, erro: 'disparo inválido ou cliente não registrado' });
       return;
     }
