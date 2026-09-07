@@ -19,19 +19,18 @@ const configuredTtlMs = Number(process.env.MESSAGE_TTL_MS);
 const TTL_MS = Number.isFinite(configuredTtlMs) && configuredTtlMs > 0
   ? configuredTtlMs
   : 2 * 60 * 1000;
-const DEFAULT_RADIUS_METERS = 40;
-const DEFAULT_TOLERANCE_DEGREES = 20;
+const DEFAULT_RADIUS_METERS = 500;
+const DEFAULT_TOLERANCE_DEGREES = 90;
 const LOCATION_MAX_AGE_MS = 15 * 1000;
 const CLEANUP_INTERVAL_MS = 1000;
 
-// O estado em memória é adequado para um único processo Node.js de teste.
 // Para múltiplas instâncias/replicas, substituir estes Maps por Redis ou banco.
 const clientsBySocketId = new Map();
 const socketIdByClientId = new Map();
 const pendingMessages = new Map();
 
 app.get('/', (req, res) => {
-  res.send('📡 Servidor do Radar Geográfico está ONLINE e pronto!');
+  res.send('Servidor do Radar Geográfico está ONLINE e pronto!');
 });
 
 function asFiniteNumber(value) {
@@ -127,9 +126,7 @@ function findBestCandidate(message, now = Date.now()) {
   return bestCandidate;
 }
 
-// Node executa os handlers de eventos de forma serial no loop de eventos.
-// A exclusão do item do Map ocorre antes dos emits, tornando a reserva atômica
-// dentro deste processo e impedindo dois receptores para o mesmo disparo.
+// Node executa os handlers de eventos de forma serial no loop de eventos. Só o primeito a ser encontrado recebe a msg
 function tryDeliverMessage(message, now = Date.now()) {
   if (!pendingMessages.has(message.idDisparo) || message.expiraEm <= now) return false;
 
@@ -269,7 +266,6 @@ io.on('connection', (socket) => {
     tryDeliverMessage(message);
   });
 
-  // Mantido por compatibilidade, mas a confirmação válida agora nasce no servidor.
   socket.on('confirmar_recebimento', (data = {}) => {
     console.log(`ℹ️ [CONFIRMAÇÃO IGNORADA] ${data.idDisparo || 'sem id'}: entrega já é controlada pelo servidor.`);
   });
