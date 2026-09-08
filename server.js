@@ -108,7 +108,7 @@ function findBestCandidate(message, now = Date.now()) {
       client.location.latitude,
       client.location.longitude,
     );
-    //if (distance > message.raioMetros) continue;
+    if (distance > message.raioMetros) continue;
 
     const bearing = bearingDegrees(
       message.lat,
@@ -116,7 +116,7 @@ function findBestCandidate(message, now = Date.now()) {
       client.location.latitude,
       client.location.longitude,
     );
-    //if (angleDifference(message.anguloDirecao, bearing) > message.toleranciaGraus) continue;
+    if (angleDifference(message.anguloDirecao, bearing) > message.toleranciaGraus) continue;
 
     if (!bestCandidate || distance < bestCandidate.distance) {
       bestCandidate = { client, distance, bearing };
