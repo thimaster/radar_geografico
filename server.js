@@ -20,7 +20,7 @@ const TTL_MS = Number.isFinite(configuredTtlMs) && configuredTtlMs > 0
   ? configuredTtlMs
   : 2 * 60 * 1000;
 const DEFAULT_RADIUS_METERS = 500;
-const DEFAULT_TOLERANCE_DEGREES = 90;
+const DEFAULT_TOLERANCE_DEGREES = 10;
 const LOCATION_MAX_AGE_MS = TTL_MS;
 const CLEANUP_INTERVAL_MS = 1000;
 
